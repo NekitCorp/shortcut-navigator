@@ -9,7 +9,8 @@ const URL_TYPE_PRIORITY: Record<UrlType, number> = {
     [UrlType.PathFirst]: 1,
     [UrlType.PathLast]: 2,
     [UrlType.QueryPage]: 3,
-    [UrlType.QueryP0]: 4,
+    [UrlType.QueryStart]: 4,
+    [UrlType.QueryP]: 5,
 };
 
 export type ProcessUrlResult =
@@ -22,7 +23,12 @@ export type ProcessUrlResult =
           valid: true;
       };
 
-export type ProcessUrlFunction = (url: string, strict: boolean) => ProcessUrlResult;
+export type ProcessUrlFunction = (
+    url: string,
+    firstPageNumber: number,
+    increment: number,
+    strict: boolean,
+) => ProcessUrlResult;
 
 const processPathFirstUrlType: ProcessUrlFunction = (url) => {
     const { origin, search, pathname } = new URL(url);
@@ -53,7 +59,11 @@ const processPathFirstUrlType: ProcessUrlFunction = (url) => {
 };
 
 // TODO: DRY
-const processPathLastUrlType: ProcessUrlFunction = (url) => {
+const processPathLastUrlType: ProcessUrlFunction = (
+    url: string,
+    firstPageNumber: number,
+    increment: number,
+) => {
     const { origin, search, pathname } = new URL(url);
     const regExp = /\d+$/;
     const paths = pathname.split('/');
@@ -66,11 +76,11 @@ const processPathLastUrlType: ProcessUrlFunction = (url) => {
     const idPath = paths[index];
     const id = Number(idPath.match(regExp)?.[0]);
 
-    paths[index] = idPath.replace(regExp, (id - 1).toString());
+    paths[index] = idPath.replace(regExp, (id - increment).toString());
 
     const prevUrl = origin + paths.join('/') + search;
 
-    paths[index] = idPath.replace(regExp, (id + 1).toString());
+    paths[index] = idPath.replace(regExp, (id + increment).toString());
 
     const nextUrl = origin + paths.join('/') + search;
 
@@ -82,8 +92,13 @@ const processPathLastUrlType: ProcessUrlFunction = (url) => {
 };
 
 const processQueryUrlType =
-    (key: string, firstPageNumber: number = 1): ProcessUrlFunction =>
-    (url: string, strict: boolean): ProcessUrlResult => {
+    (key: string): ProcessUrlFunction =>
+    (
+        url: string,
+        firstPageNumber: number,
+        increment: number,
+        strict: boolean,
+    ): ProcessUrlResult => {
         const { origin, search, pathname } = new URL(url);
         const params = new URLSearchParams(search);
         const regExp = /^\d+$/;
@@ -102,11 +117,11 @@ const processQueryUrlType =
 
         const id = idParam === null ? firstPageNumber : Number(idParam);
 
-        params.set(key, (id - 1).toString());
+        params.set(key, (id - increment).toString());
 
         const prevUrl = origin + pathname + '?' + params.toString();
 
-        params.set(key, (id + 1).toString());
+        params.set(key, (id + increment).toString());
 
         const nextUrl = origin + pathname + '?' + params.toString();
 
@@ -121,7 +136,8 @@ export const processUrlByType: Record<UrlType, ProcessUrlFunction> = {
     [UrlType.PathFirst]: processPathFirstUrlType,
     [UrlType.PathLast]: processPathLastUrlType,
     [UrlType.QueryPage]: processQueryUrlType('page'),
-    [UrlType.QueryP0]: processQueryUrlType('p', 0),
+    [UrlType.QueryP]: processQueryUrlType('p'),
+    [UrlType.QueryStart]: processQueryUrlType('start'),
 };
 
 export function perseUrl(
@@ -131,11 +147,11 @@ export function perseUrl(
     const { hostname } = new URL(url);
 
     if (DATABASE[hostname]) {
-        const type = DATABASE[hostname];
+        const { firstPageNumber, increment, type } = DATABASE[hostname];
 
         logger.log(`Hostname "${hostname}" found in database: "${type}".`);
 
-        const result = processUrlByType[type](url, false);
+        const result = processUrlByType[type](url, firstPageNumber, increment, false);
 
         if (result.valid) {
             return result;
@@ -154,7 +170,7 @@ export function perseUrl(
     ) as UrlType[];
 
     for (const type of types) {
-        const result = processUrlByType[type](url, true);
+        const result = processUrlByType[type](url, 1, 1, true);
 
         if (result.valid) {
             logger.log(`Hostname "${hostname}" not found in database. Computed type: "${type}".`);
