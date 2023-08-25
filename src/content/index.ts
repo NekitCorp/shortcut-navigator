@@ -1,9 +1,11 @@
-import Overlay from '../components/Overlay.svelte';
+import { HotkeyManager } from '../modules/hotkey-manager';
 import { Logger } from '../modules/logger';
 import { perseUrl } from './url-type';
 
 const logger = new Logger();
+const hotkeyManager = new HotkeyManager(logger);
 
+// TODO: module
 const parseResult = perseUrl(window.location.href, logger);
 
 function navigate(url: string): void {
@@ -24,7 +26,6 @@ if (parseResult === null) {
     logger.log(`Prev url: ${parseResult.prevUrl}`);
     logger.log(`Next url: ${parseResult.nextUrl}`);
 
-    const component = new Overlay({ target: document.body });
-    component.$on('prev', () => navigate(parseResult.prevUrl));
-    component.$on('next', () => navigate(parseResult.nextUrl));
+    hotkeyManager.setHotKey('ctrl+left, option+left', () => navigate(parseResult.prevUrl));
+    hotkeyManager.setHotKey('ctrl+right, option+right', () => navigate(parseResult.nextUrl));
 }
