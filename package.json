@@ -1,0 +1,33 @@
+{
+    "name": "hotkey-navigator",
+    "description": "TODO",
+    "version": "0.1.0-beta1",
+    "private": true,
+    "type": "module",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/NekitCorp/hotkey-navigator.git"
+    },
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "package": "rm -rf dist package.zip && vite build && zip -r package.zip dist/",
+        "check:svelte": "svelte-check --tsconfig ./tsconfig.json",
+        "check:tsc": "tsc --noEmit"
+    },
+    "dependencies": {
+        "hotkeys-js": "3.12.0"
+    },
+    "devDependencies": {
+        "@crxjs/vite-plugin": "2.0.0-beta.18",
+        "@sveltejs/vite-plugin-svelte": "2.4.5",
+        "@tsconfig/svelte": "5.0.2",
+        "@types/chrome": "0.0.243",
+        "svelte": "4.2.0",
+        "svelte-check": "3.5.0",
+        "svelte-preprocess": "5.0.4",
+        "tslib": "2.6.2",
+        "typescript": "5.2.2",
+        "vite": "4.2.3"
+    }
+}
