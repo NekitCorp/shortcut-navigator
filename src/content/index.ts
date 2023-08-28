@@ -1,12 +1,12 @@
 import { HotkeyManager } from '../modules/hotkey-manager';
 import { Logger } from '../modules/logger';
-import { perseUrl } from './url-type';
+import { UrlManager } from '../modules/url-manager';
 
 const logger = new Logger();
 const hotkeyManager = new HotkeyManager(logger);
+const urlManager = new UrlManager(logger);
 
-// TODO: module
-const parseResult = perseUrl(window.location.href, logger);
+const parseResult = urlManager.perseUrl(window.location.href);
 
 function navigate(url: string): void {
     logger.log(`Navigate to: ${url}`);
@@ -18,7 +18,7 @@ function navigate(url: string): void {
 }
 
 if (parseResult === null) {
-    logger.warn(
+    logger.log(
         `Failed to parse url: ${window.location.href}. ID not found. ` +
             `Need to add hostname "${window.location.hostname}" to database for special processing.`,
     );
