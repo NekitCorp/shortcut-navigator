@@ -13,7 +13,8 @@
         "build": "vite build",
         "package": "rm -rf dist package.zip && vite build && zip -r package.zip dist/",
         "check:svelte": "svelte-check --tsconfig ./tsconfig.json",
-        "check:tsc": "tsc --noEmit"
+        "check:tsc": "tsc --noEmit",
+        "test": "vitest"
     },
     "dependencies": {
         "hotkeys-js": "3.12.0"
@@ -28,6 +29,7 @@
         "svelte-preprocess": "5.0.4",
         "tslib": "2.6.2",
         "typescript": "5.2.2",
-        "vite": "4.2.3"
+        "vite": "4.2.3",
+        "vitest": "0.34.3"
     }
 }

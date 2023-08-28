@@ -18,7 +18,7 @@ function parseQuery(key: string): ParseUrlFunction {
 
         params.set(key, (id - pageDelta).toString());
 
-        const prevUrl = origin + pathname + '?' + params.toString();
+        const prevUrl = id <= firstPageNumber ? null : origin + pathname + '?' + params.toString();
 
         params.set(key, (id + pageDelta).toString());
 

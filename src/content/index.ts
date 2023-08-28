@@ -23,9 +23,15 @@ if (parseResult === null) {
             `Need to add hostname "${window.location.hostname}" to database for special processing.`,
     );
 } else {
-    logger.log(`Prev url: ${parseResult.prevUrl}`);
-    logger.log(`Next url: ${parseResult.nextUrl}`);
+    const { nextUrl, prevUrl } = parseResult;
 
-    hotkeyManager.setHotKey('ctrl+left, option+left', () => navigate(parseResult.prevUrl));
-    hotkeyManager.setHotKey('ctrl+right, option+right', () => navigate(parseResult.nextUrl));
+    logger.log(`Prev url: ${prevUrl}`);
+    logger.log(`Next url: ${nextUrl}`);
+
+    if (prevUrl) {
+        hotkeyManager.setHotKey('ctrl+left, option+left', () => navigate(prevUrl));
+    }
+    if (nextUrl) {
+        hotkeyManager.setHotKey('ctrl+right, option+right', () => navigate(nextUrl));
+    }
 }

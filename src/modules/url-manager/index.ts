@@ -39,7 +39,7 @@ const parseUrlByType: Record<UrlParseType, ParseUrlFunction> = {
 export class UrlManager {
     constructor(private logger: ILogger) {}
 
-    perseUrl(url: string): { prevUrl: string; nextUrl: string } | null {
+    perseUrl(url: string): { prevUrl: string | null; nextUrl: string | null } | null {
         const { hostname } = new URL(url);
 
         // Trying to find in the database...

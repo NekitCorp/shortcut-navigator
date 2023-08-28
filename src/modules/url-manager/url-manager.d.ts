@@ -3,8 +3,8 @@ type ParseUrlResult =
           valid: false;
       }
     | {
-          nextUrl: string;
-          prevUrl: string;
+          nextUrl: string | null;
+          prevUrl: string | null;
           valid: true;
       };
 
