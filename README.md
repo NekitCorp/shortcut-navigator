@@ -2,6 +2,11 @@
 
 Tired of endless clicking and scrolling while navigating through your favorite websites? Our browser extension revolutionizes the way you interact with websites by providing lightning-fast navigation using customizable shortcuts.
 
+## Available shortcuts
+
+-   **Go to previous page**: `⌥ + ←` / `ctrl + ←` (macOS / Windows)
+-   **Go to next page**: `⌥ + →` / `ctrl + →` (macOS / Windows)
+
 ## Key features
 
 1. **Effortless Navigation**: Navigating through the pages of a website becomes as easy as a keystroke. Effortlessly jump from one page to another without lifting a finger from your keyboard.
