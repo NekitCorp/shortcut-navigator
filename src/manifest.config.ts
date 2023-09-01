@@ -1,7 +1,7 @@
 import { defineManifest } from '@crxjs/vite-plugin';
 import packageJson from '../package.json';
 
-const { version, name, description } = packageJson;
+const { version } = packageJson;
 
 // Convert from Semver (example: 0.1.0-beta6)
 const [major, minor, patch] = version
@@ -12,8 +12,9 @@ const [major, minor, patch] = version
 
 export default defineManifest({
     manifest_version: 3,
-    name: name,
-    description: description,
+    name: 'Shortcut Navigator',
+    description:
+        'Navigate through websites using customizable shortcuts, boosting efficiency and minimizing clicks.',
     version: `${major}.${minor}.${patch}`,
     version_name: version,
     icons: {

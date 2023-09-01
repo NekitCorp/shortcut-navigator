@@ -1,12 +1,12 @@
 {
-    "name": "hotkey-navigator",
-    "description": "TODO",
+    "name": "shortcut-navigator",
+    "description": "Browser extension for navigating the website through shortcuts.",
     "version": "0.1.0-beta1",
     "private": true,
     "type": "module",
     "repository": {
         "type": "git",
-        "url": "https://github.com/NekitCorp/hotkey-navigator.git"
+        "url": "https://github.com/NekitCorp/shortcut-navigator.git"
     },
     "scripts": {
         "dev": "vite",

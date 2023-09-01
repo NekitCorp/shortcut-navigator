@@ -1,3 +1,3 @@
-# hotkey-navigator
+# Shortcut navigator
 
-TODO
+Browser extension for navigating through websites using customizable shortcuts, boosting efficiency and minimizing clicks.
