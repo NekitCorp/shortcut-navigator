@@ -1,4 +1,4 @@
-# Shortcut navigator
+# Shortcut Navigator
 
 Tired of endless clicking and scrolling while navigating through your favorite websites? Our browser extension revolutionizes the way you interact with websites by providing lightning-fast navigation using customizable shortcuts.
 

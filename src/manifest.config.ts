@@ -17,6 +17,7 @@ export default defineManifest({
         'Navigate through websites using customizable shortcuts, boosting efficiency and minimizing clicks.',
     version: `${major}.${minor}.${patch}`,
     version_name: version,
+    permissions: ['storage'] as chrome.runtime.ManifestPermissions[],
     icons: {
         '16': 'src/assets/icons/icon-16.png',
         '32': 'src/assets/icons/icon-32.png',
@@ -31,5 +32,9 @@ export default defineManifest({
     ],
     background: {
         service_worker: 'src/background/index.ts',
+    },
+    options_ui: {
+        page: 'src/options/options.html',
+        open_in_tab: true,
     },
 });

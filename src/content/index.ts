@@ -1,10 +1,12 @@
 import { HotkeyManager } from '../modules/hotkey-manager';
 import { Logger } from '../modules/logger';
+import { Storage } from '../modules/storage';
 import { UrlManager } from '../modules/url-manager';
 
 const logger = new Logger();
 const hotkeyManager = new HotkeyManager(logger);
 const urlManager = new UrlManager(logger);
+const storage = new Storage(logger);
 
 const parseResult = urlManager.perseUrl(window.location.href);
 
@@ -28,10 +30,20 @@ if (parseResult === null) {
     logger.log(`Prev url: ${prevUrl}`);
     logger.log(`Next url: ${nextUrl}`);
 
-    if (prevUrl) {
-        hotkeyManager.setHotKey('ctrl+left, option+left', () => navigate(prevUrl));
-    }
-    if (nextUrl) {
-        hotkeyManager.setHotKey('ctrl+right, option+right', () => navigate(nextUrl));
-    }
+    storage.read().then(({ shortcuts }) => {
+        if (prevUrl) {
+            shortcuts
+                .filter((shortcut) => shortcut.type === 'prevUrl' && shortcut.key)
+                .forEach((shortcut) => {
+                    hotkeyManager.setHotKey(shortcut.key, () => navigate(prevUrl));
+                });
+        }
+        if (nextUrl) {
+            shortcuts
+                .filter((shortcut) => shortcut.type === 'nextUrl' && shortcut.key)
+                .forEach((shortcut) => {
+                    hotkeyManager.setHotKey(shortcut.key, () => navigate(nextUrl));
+                });
+        }
+    });
 }
