@@ -1,0 +1,33 @@
+name: Publish
+
+on:
+    push:
+        tags:
+            - '*'
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+            # Install dependencies
+            - run: yarn
+            # Tests
+            - run: yarn check:tsc
+            - run: yarn check:svelte
+            - run: yarn test
+            # Prepare package
+            - run: yarn package
+            # Public package
+            - name: Upload to Chrome Web Store
+              uses: mobilefirstllc/cws-publish@2.1.1
+              with:
+                  action: 'upload'
+                  client_id: ${{ secrets.CLIENT }}
+                  client_secret: ${{ secrets.SECRET }}
+                  refresh_token: ${{ secrets.TOKEN }}
+                  extension_id: ${{ secrets.EXTENSION_ID }}
+                  zip_file: 'package.zip'
