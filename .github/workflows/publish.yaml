@@ -20,6 +20,7 @@ jobs:
             - run: yarn check:svelte
             - run: yarn test
             # Prepare package
+            - run: echo -e "VITE_FEEDBACK_SERVICE_URL=${{ secrets.FEEDBACK_SERVICE_URL }}\n" > .env.local
             - run: yarn package
             # Public package
             - name: Upload to Chrome Web Store
