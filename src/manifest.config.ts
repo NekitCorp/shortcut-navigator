@@ -17,7 +17,7 @@ export default defineManifest({
         'Navigate through websites using customizable shortcuts, boosting efficiency and minimizing clicks.',
     version: `${major}.${minor}.${patch}`,
     version_name: version,
-    permissions: ['storage', 'contextMenus'] as chrome.runtime.ManifestPermissions[],
+    permissions: ['storage', 'contextMenus', 'activeTab'] as chrome.runtime.ManifestPermissions[],
     icons: {
         '16': 'src/assets/icons/icon-16.png',
         '32': 'src/assets/icons/icon-32.png',
@@ -36,5 +36,14 @@ export default defineManifest({
     options_ui: {
         page: 'src/options/options.html',
         open_in_tab: true,
+    },
+    action: {
+        default_popup: 'src/action/action.html',
+        default_icon: {
+            '16': 'src/assets/icons/icon-16.png',
+            '32': 'src/assets/icons/icon-32.png',
+            '48': 'src/assets/icons/icon-48.png',
+        },
+        default_title: 'Feedback form',
     },
 });

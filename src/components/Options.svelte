@@ -1,4 +1,5 @@
 <script lang="ts">
+    import FeedbackForm from './FeedbackForm.svelte';
     import ShortcutInput from './ShortcutInput.svelte';
 
     export let modules: { hotkeyManager: IHotkeyManager; storage: IStorage };
@@ -28,6 +29,7 @@
 
 <div class="container">
     <div class="shortcuts">
+        <h1>Keyboard shortcuts</h1>
         {#each shortcuts as shortcut}
             <ShortcutInput
                 label={`Shortcut navigate to the ${
@@ -39,17 +41,33 @@
                 on:remove={() => remove(shortcut)}
             />
         {/each}
+        <div class="addButtons">
+            <button on:click={() => add('prevUrl')}>Add ⇦</button>
+            <button on:click={() => add('nextUrl')}>Add ⇨</button>
+        </div>
     </div>
-    <div class="addButtons">
-        <button on:click={() => add('prevUrl')}>Add ⇦</button>
-        <button on:click={() => add('nextUrl')}>Add ⇨</button>
+
+    <hr />
+
+    <div class="feedbackForm">
+        <FeedbackForm initUrl="" />
     </div>
+
+    <hr />
 </div>
 
 <style>
     .container {
         max-width: 540px;
         margin: 0 auto;
+    }
+
+    h1 {
+        font-size: 1.3em;
+    }
+
+    hr {
+        margin: 3em 0;
     }
 
     .shortcuts {
