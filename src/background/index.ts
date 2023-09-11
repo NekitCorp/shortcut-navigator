@@ -15,38 +15,84 @@ function handleContextMenusClick(info: chrome.contextMenus.OnClickData, tab?: ch
 
     if (tab?.id && info.parentMenuItemId === 'navigate') {
         const parseResult = urlManager.perseUrl(info.pageUrl);
+        const id = info.menuItemId as ContextMenuItemId;
 
         if (parseResult !== null) {
-            if (info.menuItemId === 'next' && parseResult.nextUrl) {
-                chrome.tabs.update(tab.id, { url: parseResult.nextUrl });
-            }
-
-            if (info.menuItemId === 'prev' && parseResult.prevUrl) {
-                chrome.tabs.update(tab.id, { url: parseResult.prevUrl });
+            switch (id) {
+                case ContextMenuItemId.Next: {
+                    if (parseResult.nextUrl) {
+                        chrome.tabs.update(tab.id, { url: parseResult.nextUrl });
+                    }
+                    break;
+                }
+                case ContextMenuItemId.Previous: {
+                    if (parseResult.prevUrl) {
+                        chrome.tabs.update(tab.id, { url: parseResult.prevUrl });
+                    }
+                    break;
+                }
+                case ContextMenuItemId.NextBlank: {
+                    if (parseResult.nextUrl) {
+                        chrome.tabs.create({ url: parseResult.nextUrl });
+                    }
+                    break;
+                }
+                case ContextMenuItemId.PreviousBlank: {
+                    if (parseResult.prevUrl) {
+                        chrome.tabs.create({ url: parseResult.prevUrl });
+                    }
+                    break;
+                }
+                case ContextMenuItemId.Navigate:
+                    break;
+                default:
+                    ASSERT_EXHAUSTIVE(id);
             }
         }
     }
+}
+
+const enum ContextMenuItemId {
+    Navigate = 'navigate',
+    Previous = 'previous',
+    Next = 'next',
+    PreviousBlank = 'previous-blank',
+    NextBlank = 'next-blank',
 }
 
 function handleInstalled(details: chrome.runtime.InstalledDetails) {
     const parent = chrome.contextMenus.create({
         title: 'Navigate to',
         contexts: ['all'],
-        id: 'navigate',
+        id: ContextMenuItemId.Navigate,
     });
 
     chrome.contextMenus.create({
         title: 'Previous page',
         parentId: parent,
         contexts: ['all'],
-        id: 'prev',
+        id: ContextMenuItemId.Previous,
     });
 
     chrome.contextMenus.create({
         title: 'Next page',
         parentId: parent,
         contexts: ['all'],
-        id: 'next',
+        id: ContextMenuItemId.Next,
+    });
+
+    chrome.contextMenus.create({
+        title: 'Previous page in a new tab',
+        parentId: parent,
+        contexts: ['all'],
+        id: ContextMenuItemId.PreviousBlank,
+    });
+
+    chrome.contextMenus.create({
+        title: 'Next page in a new tab',
+        parentId: parent,
+        contexts: ['all'],
+        id: ContextMenuItemId.NextBlank,
     });
 }
 
@@ -61,8 +107,13 @@ function handleMessage(
         message &&
         message.type == 'change_url' &&
         typeof message.value === 'string' &&
+        typeof message.blank === 'boolean' &&
         sender.tab?.id
     ) {
-        chrome.tabs.update(sender.tab.id, { url: message.value });
+        if (message.blank) {
+            chrome.tabs.create({ url: message.value });
+        } else {
+            chrome.tabs.update(sender.tab.id, { url: message.value });
+        }
     }
 }

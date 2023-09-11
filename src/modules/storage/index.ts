@@ -5,6 +5,10 @@ export class Storage implements IStorage {
             { type: 'prevUrl', key: '⌥+left' },
             { type: 'nextUrl', key: 'ctrl+right' },
             { type: 'nextUrl', key: '⌥+right' },
+            { type: 'prevUrlBlank', key: 'ctrl+shift+left' },
+            { type: 'prevUrlBlank', key: '⌥+⇧+left' },
+            { type: 'nextUrlBlank', key: 'ctrl+shift+right' },
+            { type: 'nextUrlBlank', key: '⌥+⇧+right' },
         ],
     };
 

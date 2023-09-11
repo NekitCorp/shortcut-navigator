@@ -1,4 +1,4 @@
-type ShortcutType = 'nextUrl' | 'prevUrl';
+type ShortcutType = 'nextUrl' | 'prevUrl' | 'nextUrlBlank' | 'prevUrlBlank';
 
 type Shortcut = {
     key: string;
