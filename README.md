@@ -21,12 +21,13 @@ Tired of endless clicking and scrolling while navigating through your favorite w
 
 ```sh
 # Copy and fill the file with environment variables
-copy .env.example .env
+copy .env .env.local
 
 # Install dependencies
 yarn
 
-# Start telegram bot
+# Build files to `/dist` directory in dev mode
+# HMR for extension pages and content scripts
 yarn dev
 
 # Run checkers
@@ -36,10 +37,10 @@ yarn check:tsc
 # Run tests
 yarn test
 
-# Build
+# Build extension
 yarn build
 
-# Prepare package to publish
+# Prepare extension package to publish
 yarn package
 ```
 
